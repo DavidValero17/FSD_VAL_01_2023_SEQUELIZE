@@ -6,11 +6,13 @@ const commentsController = require('./controllers/commentsController');
 require('dotenv').config()
 
 const productRoutes = require('./views/productRoutes');
-
 const app = express();
+const authRoutes = require('./views/authRoutes')
 
 app.use(express.json());
+
 app.use(productRoutes);
+app.use(authRoutes);
 
 const PORT = process.env.PORT || 4000;
 
