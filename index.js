@@ -1,37 +1,21 @@
 const express = require('express');
 const { Product, Comment } = require('./models/index')
 const db = require('./db.js');
-const productController = require('./controllers/productController');
+// const productController = require('./controllers/productController');
+const commentsController = require('./controllers/commentsController');
 require('dotenv').config()
+
+const productRoutes = require('./views/productRoutes');
 
 const app = express();
 
 app.use(express.json());
+app.use(productRoutes);
 
 const PORT = process.env.PORT || 4000;
 
 app.get('/welcome', (req, res) => {
     return res.send("Bienvenido a mi app")
-})
-
-app.post('/products', productController.createProduct)
-
-app.get('/products', async(req, res)=> {
-    const products = await Product.findAll();
-
-    return res.json(products);
-})
-
-app.get('/products/:id', async (req, res) => {
-    const productId = req.params.id;
-
-    const product = await Product.findByPk(productId, {
-        // solo nos trae las relaciones con comment
-        // include: Comment,
-        include: {all: true}
-    });
-
-    return res.json(product);
 })
 
 app.delete('/products/:id', async(req, res) => {
@@ -53,22 +37,7 @@ app.put('/products/:id', async (req, res) => {
 
 })
 
-app.post('/comments', async (req, res) => {
-    try {
-        //REcuperamos info a guardar
-        const message = req.body.message;
-        const productId = req.body.product_id;
-
-        const newComment = await Comment.create({
-            product_id: productId,
-            message: message
-        })
-
-        return res.json(newComment);
-    } catch (error) {
-        return res.send(error.message);
-    }
-})
+app.post('/comments', commentsController.createComment)
 
 app.get('/comments/:id', async (req, res) => {
     const commentId = req.params.id;
