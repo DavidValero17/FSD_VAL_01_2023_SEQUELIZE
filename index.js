@@ -5,14 +5,16 @@ const db = require('./db.js');
 const commentsController = require('./controllers/commentsController');
 require('dotenv').config()
 
-const productRoutes = require('./views/productRoutes');
 const app = express();
-const authRoutes = require('./views/authRoutes')
+const productRoutes = require('./views/productRoutes');
+const authRoutes = require('./views/authRoutes');
+const userRoutes = require('./views/userRoutes');
 
 app.use(express.json());
 
 app.use(productRoutes);
 app.use(authRoutes);
+app.use(userRoutes);
 
 const PORT = process.env.PORT || 4000;
 
